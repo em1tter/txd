@@ -1,1 +1,1 @@
-TXD is a text-based railway transportation simulation. I made it as a programming introduction semester project. Sadly, all the documentation is in Czech language. I am not planning to make any more developments in the near future.
+TXD is a text-based railway transportation simulation game. I made it as a programming introduction semester project. Sadly, all the documentation is in Czech language. I am not planning to make any more developments in the near future.
