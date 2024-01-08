@@ -8,7 +8,7 @@
 #include <stdbool.h>
 
 //Parametry
-#define maxVlaku 20
+//#define maxVlaku 20
 #define minutVJednotceCasu 15
 #define maxCas 24*60/minutVJednotceCasu
 #define pocetStanic 6
@@ -310,7 +310,7 @@ void zobrazProfilTrate(parTrate *trat){ //Pozor také je toto integrované ve fu
 }
 
 void kontrolaVyberu(int *vstup, int maxvstup){ //Zkontroluje zda int vstup je větší než 0 a zároven menší nebo roven maxvstup a pokud ne, tak požádá o znovuzadání hodnoty a přepíše původní.
-    if ((maxvstup == 6)&&(*vstup==17)){
+    if ((maxvstup == 7)&&(*vstup==17)){
         printf("Tuto hru vytvořil Emitter.\nDoufám, že si hraní užíváte a cením si, že Váš životní čas věnujete právě mé hře:)\n");
         printf("\n                                                        \\  /\n                  __                                     \\/\n     _   ---===##===---_________________________--------------  _\n    [ ~~~=================###=###=###=###=###=================~~ ]\n    /  ||  | |~\\  ;;;;            ;;;            ;;;;  /~| |  ||  \\\n   /___||__| |  \\ ;;;;            [_]            ;;;; /  | |__||___\\\n   [\\        |__| ;;;;  ;;;; ;;;; ;;; ;;;; ;;;;  ;;;; |__|        /]\n  (=|    ____[-]_______________________________________[-]____    |=)\n  /  /___/|#(__)=o########o=(__)#||___|#(__)=o#########o=(__)#|\\___\\\n _________-=\\__/=--=\\__/=--=\\__/=-_____-=\\__/=--=\\__/=--=\\__/=-______\n\n");
     }
@@ -991,7 +991,8 @@ void zobrazInfoOTrati(parTrate *trat){
 void posunVCase(unsigned int oDni,unsigned char pocetVlaku,parVlaku vlaky[pocetVlaku],parTrate tratZDo[pocetStanic][pocetStanic],unsigned int krivkaZDo[pocetStanic][pocetStanic][maxCas],hodnotyCen *ceny, stavPenez *penize){
     if (!(oDni)) return;
     unsigned int den,cas,ubytek,cestujicichPrepraveno = 0,cestujicichNeprepraveno = 0;
-    unsigned char i, j, k, mistVeVlaku, sPr;
+    unsigned char i, j, k, sPr;
+    unsigned short mistVeVlaku;
     char l;
     unsigned int staniceBezUsp[poJakeDobeVsichniOdejdou][pocetStanic][pocetStanic] = {{{}}};
     unsigned int (*stanice[poJakeDobeVsichniOdejdou])[pocetStanic][pocetStanic];
@@ -1105,7 +1106,8 @@ void posunVCase(unsigned int oDni,unsigned char pocetVlaku,parVlaku vlaky[pocetV
 
 void pruzkumZDo(unsigned char zeS,unsigned char doS ,unsigned char pocetVlaku,parVlaku vlaky[pocetVlaku],parTrate tratZDo[pocetStanic][pocetStanic],unsigned int krivkaZDo[pocetStanic][pocetStanic][maxCas]){
     unsigned int den,cas,ubytek,pomocna,cestujicichPrepraveno = 0,cestujicichNeprepraveno = 0;
-    unsigned char i, j, k, mistVeVlaku, sPr;
+    unsigned char i, j, k, sPr;
+    unsigned short mistVeVlaku;
     char l;
     unsigned int staniceBezUsp[poJakeDobeVsichniOdejdou][pocetStanic][pocetStanic] = {{{0}}};
     unsigned int (*stanice[poJakeDobeVsichniOdejdou])[pocetStanic][pocetStanic];
@@ -1114,6 +1116,12 @@ void pruzkumZDo(unsigned char zeS,unsigned char doS ,unsigned char pocetVlaku,pa
     unsigned short pocetLidiVeVlaku[pocetVlaku]; //Aktuální počet lidí ve vlaku x
     for (i=0;i<poJakeDobeVsichniOdejdou;i++){
         stanice[i] = &staniceBezUsp[i];
+    }
+    for (i=0;i<pocetVlaku;i++){
+        for (j=0;j<pocetStanic;j++){
+            lidiDoStanice[i][j] = 0;
+        }
+        pocetLidiVeVlaku[i] = 0;
     }
     printf("Cestujících    ve stanici čekalo    z nich bylo přepraveno    nechtělo déle čekat a naštvaně odešlo\n");
     for (cas=0;cas<maxCas;cas++){
@@ -1224,7 +1232,7 @@ int main()
     FILE *ukSoubor;
     char nazevSouboru[] = "txd0.sav";
     char idSlotu = 3;
-    unsigned char pocetVlaku = 0; //Počet vlaků
+    unsigned short pocetVlaku = 0; //Počet vlaků
     int aktCas = 0; //Aktuální čas
     unsigned int i,j,k,l; //Pomocné
     int vyber; //Pomocné
@@ -1740,7 +1748,7 @@ int main()
         }
     
     //Kontrola konstant
-    if(maxVlaku < 1) {printf("Maximální počet vlaků musí být větší než 0."); return EXIT_FAILURE;}
+   // if(maxVlaku < 1) {printf("Maximální počet vlaků musí být větší než 0."); return EXIT_FAILURE;}
     if(24*60%minutVJednotceCasu!=0) {printf("Počet minut ve dni musí být dělitelný počtem minut v jednotce času."); return EXIT_FAILURE;}
     
     //Zkušební hodnoty
@@ -1995,7 +2003,7 @@ int main()
                 break;
             case(4):
                 printf("%s",oddelovac);
-                if (pocetVlaku==UCHAR_MAX){
+                if (pocetVlaku==USHRT_MAX){
                     printf("    Už vlastníte maximální počet vlaků.\n");
                     break;
                 }
